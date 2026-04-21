@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenShell - The Intelligent AI CLI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0014;
+            --bg-light: #f5f5f5;
+            --text-dark: #f5f5f5;
+            --text-light: #0a0014;
+            --primary: #a855f7;
+            --primary-dark: #9333ea;
+            --accent: #e879f9;
+            --border: rgba(168, 85, 247, 0.3);
+        }
+
+        html[data-theme="light"] {
+            --bg-dark: #f5f5f5;
+            --bg-light: #0a0014;
+            --text-dark: #0a0014;
+            --text-light: #f5f5f5;
+            --border: rgba(168, 85, 247, 0.25);
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            color: var(--text-dark);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--bg-dark);
+        }
+
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Courier New', monospace;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            color: var(--text-dark);
+        }
+
+        .features-section {
+            padding: 3rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            padding: 2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(168, 85, 247, 0.05);
+            transition: all 0.3s;
+        }
+
+        .feature:hover {
+            border-color: var(--primary);
+            background: rgba(168, 85, 247, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            color: var(--text-dark);
+        }
+
+        .installation {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            color: var(--text-dark);
+        }
+
+        html[data-theme="light"] .code-block {
+            background: rgba(168, 85, 247, 0.08);
+        }
+
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .command-card {
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: rgba(168, 85, 247, 0.06);
+            transition: all 0.3s;
+        }
+
+        .command-card:hover {
+            border-color: var(--accent);
+            background: rgba(168, 85, 247, 0.12);
+        }
+
+        html[data-theme="light"] .command-card {
+            background: rgba(168, 85, 247, 0.08);
+        }
+
+        .command-name {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .command-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            color: var(--text-dark);
+        }
+
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            opacity: 0.8;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">$ OpenShell</div>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀</button>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h1 class="hero-title">OpenShell</h1>
+                <p class="hero-subtitle">The Intelligent AI CLI</p>
+                <p class="hero-description">
+                    Bring the power of LLMs to your terminal. Secure, extensible, and built for developers.
+                </p>
+            </section>
+
+            <section class="features-section">
+                <div class="feature">
+                    <div class="feature-title">Multi-Provider</div>
+                    <div class="feature-desc">OpenAI, Anthropic, Ollama. Choose the AI that fits your task.</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-title">Skills System</div>
+                    <div class="feature-desc">Extend capabilities by dropping files into ~/.openshell/skills/</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-title">MCP Ready</div>
+                    <div class="feature-desc">Model Context Protocol integration for seamless data and tools.</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-title">Security First</div>
+                    <div class="feature-desc">Granular permissions. Manual consent or autonomous mode.</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-title">Context Persistence</div>
+                    <div class="feature-desc">Automatic conversation history management per model.</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-title">Automations</div>
+                    <div class="feature-desc">Built-in engine for scheduled tasks and event-driven workflows.</div>
+                </div>
+            </section>
+
+            <section class="installation">
+                <h2 class="section-title">Quick Start</h2>
+                <p style="opacity: 0.85; margin-bottom: 1.5rem;">Clone, install, and start using OpenShell in minutes.</p>
+                <div class="code-block">
+                    git clone https://github.com/OpenGitCode/OpenShell.git<br>
+                    cd OpenShell<br>
+                    npm install<br>
+                    npm run build<br>
+                    npm link
+                </div>
+                <div class="code-block">
+                    openshell config<br>
+                    openshell chat
+                </div>
+            </section>
+
+            <section class="installation">
+                <h2 class="section-title">Commands</h2>
+                <div class="commands-grid">
+                    <div class="command-card">
+                        <div class="command-name">openshell chat</div>
+                        <div class="command-desc">Interactive AI conversation</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">openshell skills</div>
+                        <div class="command-desc">Manage capabilities</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">openshell mcp</div>
+                        <div class="command-desc">MCP integrations</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">openshell auto</div>
+                        <div class="command-desc">Configure automation</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">openshell doctor</div>
+                        <div class="command-desc">System diagnostics</div>
+                    </div>
+                    <div class="command-card">
+                        <div class="command-name">openshell config</div>
+                        <div class="command-desc">Setup providers</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Made by OpenGit</p>
+            <p style="margin-top: 1rem;">
+                <a href="https://github.com/OpenGitCode/OpenShell" target="_blank">GitHub</a> • 
+                <a href="https://github.com/OpenGitCode/OpenShell/blob/main/LICENSE" target="_blank">MIT License</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.dataset.theme || 'dark';
+            const next = current === 'light' ? 'dark' : 'light';
+            html.dataset.theme = next;
+            localStorage.setItem('openshell-theme', next);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('openshell-theme') || 'dark';
+            document.documentElement.dataset.theme = saved;
+        });
+    </script>
+</body>
+</html>
