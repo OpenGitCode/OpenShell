@@ -26,14 +26,18 @@ export async function runConfig() {
             type: 'list',
             name: 'provider',
             message: 'Select LLM Provider:',
-            choices: ['openai', 'anthropic', 'openrouter', 'ollama'],
+            choices: ['openai', 'anthropic', 'openrouter', 'ollama', 'gemini'],
             default: config.get('provider')
         },
         {
             type: 'input',
             name: 'model',
             message: 'Enter Model Name:',
-            default: (ans: any) => ans.provider === 'openai' ? 'gpt-4o' : 'llama3',
+            default: (ans: any) => {
+                if (ans.provider === 'openai') return 'gpt-4o';
+                if (ans.provider === 'gemini') return 'gemini-1.5-flash';
+                return 'llama3';
+            },
             when: (ans: any) => ans.provider !== 'openai' || !config.get('model')
         },
         {

@@ -7,6 +7,7 @@ interface ConfigSchema {
     apiKey?: string;
     ollamaUrl?: string;
     autonomousMode: boolean;
+    compactMode?: boolean;
 }
 
 const conf = new Conf<ConfigSchema>({

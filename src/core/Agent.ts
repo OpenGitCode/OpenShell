@@ -3,6 +3,8 @@ import { OpenAIProvider } from './providers/OpenAIProvider.js';
 import { OllamaProvider } from './providers/OllamaProvider.js';
 import { AnthropicProvider } from './providers/AnthropicProvider.js';
 import { OpenRouterProvider } from './providers/OpenRouterProvider.js';
+import { GeminiProvider } from './providers/GeminiProvider.js';
+import { Memory } from './Memory.js';
 import config from './Config.js';
 import { getSkillsSummary, getModelContextDir } from '../utils/FileSystem.js';
 import fs from 'fs';
@@ -11,6 +13,7 @@ import path from 'path';
 export class Agent {
     private provider: Provider;
     private history: Message[] = [];
+    private memory: Memory;
     private contextFile: string;
 
     constructor() {
@@ -23,6 +26,8 @@ export class Agent {
             this.provider = new AnthropicProvider();
         } else if (providerType === 'openrouter') {
             this.provider = new OpenRouterProvider();
+        } else if (providerType === 'gemini') {
+            this.provider = new GeminiProvider();
         } else {
             throw new Error(`Provider ${providerType} not implemented yet.`);
         }
@@ -30,6 +35,7 @@ export class Agent {
         const modelName = config.get('model');
         const contextDir = getModelContextDir(modelName);
         this.contextFile = path.join(contextDir, 'history.json');
+        this.memory = new Memory();
         this.loadHistory();
     }
 
@@ -49,7 +55,6 @@ export class Agent {
 
     async ask(userInput: string, onToken?: (token: string) => void): Promise<string> {
         const skillsSummary = getSkillsSummary();
-        const autonomousMode = config.get('autonomousMode');
         
         // Procesar menciones de archivos @[archivo.ext]
         const fileRegex = /@\[(.*?)\]/g;
@@ -67,20 +72,28 @@ export class Agent {
             }
         }
 
-        const systemPrompt = `You are OpenShell, a terminal AI. 
-User: ${process.env.USER || 'User'} (Corona)
-Context: ${process.cwd()} (${process.platform})
+        const skillsSummary = getSkillsSummary();
+        const userLearnings = this.memory.getRecall();
 
-Available Skills:
+        const systemPrompt = `You are OpenShell, a professional and secure AI assistant by OpenGit.
+Operating System: ${process.platform}
+Architecture: ${process.arch}
+Current User: ${process.env.USER || 'developer'}
+
+Your purpose is to assist the user (Corona, founder of OpenGit) with high-level terminal tasks, automation, and project management.
+
+### Key User Learnings & Preferences:
+${userLearnings}
+
+### Available Skills:
 ${skillsSummary}
 
-${fileContext ? 'Files: ' + fileContext : ''}
-Capabilities: search_web, read_file, write_file, execute_command.
-Rules: 
-- Use TOOL_CALL: {"tool": "...", ...} for tools.
-- If you need details about a skill, use read_file on its Location (e.g. read_file skills/github/SKILL.md).
-- If using \`\`\`bash blocks, ONLY put the raw command inside. No labels or prefixes.
-- Be concise.`;
+Rules:
+1. OBEY: Execute commands exactly as asked.
+2. IDENTITY: Check your skills to know more about OpenShell/OpenGit.
+3. NO INSTALLS: Never use wget, curl, or apt to install.
+4. STOP: If a command fails, wait for user instructions.
+5. FORMAT: TOOL_CALL: {"tool": "execute_command", "command": "cmd"}`;
 
         const messages: Message[] = [
             { role: 'system', content: systemPrompt },

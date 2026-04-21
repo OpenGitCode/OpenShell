@@ -1,12 +1,12 @@
-# <p align="center">🚀 OpenShell</p>
+# <p align="center">🔮 OpenShell</p>
 
 <p align="center">
-  <strong>The Intelligent, Secure, and Extensible AI CLI for Modern Developers</strong>
+  <strong>The Intelligent, Secure, and Elite AI CLI by OpenGit</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.0.0-blue.svg?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/badge/Version-2.5.0-blueviolet.svg?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/License-MIT-purple.svg?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Built%20With-TypeScript-blue?style=for-the-badge&logo=typescript" alt="TypeScript">
 </p>
 
@@ -14,73 +14,56 @@
 
 ## ✨ Overview
 
-**OpenShell** is a next-generation Command Line Interface (CLI) designed to bring the power of LLMs directly to your terminal. Built with security and extensibility at its core, OpenShell allows you to automate complex tasks, manage systems, and interact with various AI providers seamlessly.
+**OpenShell** is a professional-grade terminal assistant designed for power users who demand speed, security, and a premium experience. Developed by **OpenGit**, it bridges the gap between raw shell commands and modern AI intelligence.
 
-Created by **OpenGit**, it aims to be the ultimate companion for developers who want to stay in the terminal while leveraging state-of-the-art AI.
+With its signature **Deep Purple** aesthetic and refined interaction model, OpenShell version **2.5.0** introduces native Gemini support, hardened security protocols, and a more obedient agent personality.
 
-## 🌟 Key Features
+## 🌟 What's New in v2.5.0
 
-- 🤖 **Multi-Provider Intelligence**: Native support for **OpenAI**, **Anthropic**, and **Ollama**. Choose the brain that fits your task.
-- 🧠 **Skills System**: Teach your agent new tricks! Simply drop Markdown files into `~/.openshell/skills/` to expand its capabilities.
-- 🛠️ **MCP Integration**: Fully compatible with the **Model Context Protocol**, enabling a standard way to connect AI models to data and tools.
-- 🔒 **Security First**: Granular permission modes. Choose between **Manual Consent** for safety or **Autonomous Mode** for speed.
-- 📜 **Context Persistence**: Model-specific conversation history managed automatically in `~/.openshell/context/`.
-- ⚡ **Automations**: Built-in engine for scheduled tasks and event-driven automation.
+- 🧠 **Autodidaxis (Self-Learning)**: First implementation of the persistent memory system. The agent now learns and recalls user preferences.
+- ♊ **Native Gemini Support**: Full integration with Google's Gemini models (including the free API).
+- 🛡️ **Hardened Security**: Multi-layer protection against dangerous commands (`sudo`, `apt`, etc.) even in autonomous mode.
+- 🎨 **Premium UI**: Cohesive purple-themed interface with optimized markdown rendering and smooth streaming.
+- 🤖 **Strict Obedience**: Reprogrammed agent personality that follows literal commands and stops hallucinations.
+- 🧹 **Anti-Watermark Purge**: Cleaned up legacy project references to ensure a 100% pure OpenShell experience.
 
-## 🚀 Quick Start
+## 🚀 Key Capabilities
 
-### Installation
+- 🤖 **Multi-Provider Intelligence**: Support for **Gemini**, **OpenAI**, **Anthropic**, **OpenRouter**, and **Ollama**.
+- 🧠 **Skills System**: Expand capabilities by adding Markdown files to `~/.openshell/skills/`.
+- 🔒 **Security-First Architecture**: Intelligent command flagging and manual confirmation for high-risk actions.
+- 📜 **Clean Conversation**: Auto-cleaning of tool outputs and model-specific history management.
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/OpenGitCode/OpenShell.git
-   cd OpenShell
-   ```
+## 🗺️ Roadmap & Vision
 
-2. **Install dependencies & build**:
-   ```bash
-   npm install
-   npm run build
-   ```
-
-3. **Link the CLI**:
-   ```bash
-   npm link
-   ```
-
-### Configuration
-
-Set up your preferred AI provider and API keys:
-```bash
-openshell config
-```
+OpenShell is on a journey to become a fully distributed intelligence network. Check out our **[ROADMAP.md](./ROADMAP.md)** to see how we're implementing:
+- **Autodidaxis**: Continuous self-learning from user interactions.
+- **Smart Orchestration**: Intelligent workflow automation.
+- **Distributed Connectivity**: Multi-node agent coordination.
 
 ## 🛠 Usage
 
-| Command | Description |
-| :--- | :--- |
-| `openshell chat` | Start an interactive AI session |
-| `openshell skills` | List and manage learned skills |
-| `openshell mcp` | Manage Model Context Protocol integrations |
-| `openshell auto` | Configure and run automations |
-| `openshell doctor` | Run system diagnostics and health checks |
+```bash
+# Start the premium experience
+openshell chat
 
-## 📂 Project Structure
+# Configure your provider (Try the new Gemini option!)
+openshell config
 
-- `~/.openshell/skills`: Your agent's "brain" extension.
-- `~/.openshell/context`: Conversation history and state.
-- `~/.openshell/mcp`: MCP definition files.
-- `~/.openshell/automations`: Custom automation scripts.
+# Clean context and start fresh
+/clear context
+```
 
-## 🛡 Safety & Governance
+## 🛡 Security & Safety
 
-OpenShell follows strict safety guidelines:
-- **Zero-Trust by Default**: The agent cannot modify core system files without explicit permission.
-- **Sandboxed Operations**: Access is restricted to authorized directories.
-- **Audit Logs**: Every action taken by the agent is logged for transparency.
+OpenShell 2.1.0 implements a **Zero-Trust** execution model:
+- **Sensitive Command Blocking**: Patterns like `sudo`, `rm -rf`, and package managers are automatically flagged.
+- **Loop Protection**: Capped tool call loops to prevent AI "hallucination spirals".
+- **User Confirmation**: Critical actions always require a manual "Yes" regardless of the autonomy mode.
 
 ---
 
 <p align="center">
-  Made with ❤️ by <strong>OpenGit</strong>
+  Developed with excellence by <strong>OpenGit</strong><br>
+  <a href="https://opengitcode.github.io/OpenShell/">Website</a> • <a href="https://github.com/OpenGitCode/">GitHub</a>
 </p>

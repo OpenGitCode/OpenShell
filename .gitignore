@@ -21,3 +21,5 @@ Thumbs.db
 
 # Test files (optional, but cleaning up root)
 test-openrouter.*
+scratch/
+*.log
