@@ -7,6 +7,7 @@ export const SKILLS_DIR = path.join(OPEN_SHELL_DIR, 'skills');
 export const CONTEXT_DIR = path.join(OPEN_SHELL_DIR, 'context');
 export const MCP_DIR = path.join(OPEN_SHELL_DIR, 'mcp');
 export const AUTO_DIR = path.join(OPEN_SHELL_DIR, 'automations');
+export const LOCAL_SKILLS_DIR = path.join(process.cwd(), 'skills');
 
 export function ensureDirectories() {
     const dirs = [OPEN_SHELL_DIR, SKILLS_DIR, CONTEXT_DIR, MCP_DIR, AUTO_DIR];
@@ -38,9 +39,44 @@ export function getModelContextDir(modelName: string): string {
     return modelDir;
 }
 
+export function getSkillsSummary(): string {
+    const summaries: string[] = [];
+    
+    const findSummaries = (dir: string) => {
+        if (!fs.existsSync(dir)) return;
+        
+        const items = fs.readdirSync(dir);
+        for (const item of items) {
+            const fullPath = path.join(dir, item);
+            const stat = fs.statSync(fullPath);
+            
+            if (stat.isDirectory()) {
+                const skillFile = path.join(fullPath, 'SKILL.md');
+                if (fs.existsSync(skillFile)) {
+                    const content = fs.readFileSync(skillFile, 'utf-8');
+                    const nameMatch = content.match(/name:\s*(.*)/);
+                    const descMatch = content.match(/description:\s*(.*)/);
+                    const name = nameMatch?.[1] || item;
+                    const desc = descMatch?.[1] || 'No description';
+                    summaries.push(`- ${name}: ${desc} (Location: ${fullPath})`);
+                } else {
+                    findSummaries(fullPath);
+                }
+            } else if (item.endsWith('.md')) {
+                const content = fs.readFileSync(fullPath, 'utf-8');
+                const title = content.split('\n')[0]?.replace('#', '').trim() || item;
+                summaries.push(`- ${title} (Location: ${fullPath})`);
+            }
+        }
+    };
+
+    findSummaries(SKILLS_DIR);
+    findSummaries(LOCAL_SKILLS_DIR);
+
+    return summaries.join('\n');
+}
+
 export function readSkills(): string[] {
-    if (!fs.existsSync(SKILLS_DIR)) return [];
-    return fs.readdirSync(SKILLS_DIR)
-        .filter(file => file.endsWith('.md'))
-        .map(file => fs.readFileSync(path.join(SKILLS_DIR, file), 'utf-8'));
+    // Mantener por compatibilidad pero usar getSkillsSummary para el prompt
+    return [];
 }

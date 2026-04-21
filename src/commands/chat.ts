@@ -13,6 +13,7 @@ import readline from 'readline';
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
+import { isSafeCommand } from '../utils/Security.js';
 
 // Registrar el plugin de autocompletado
 inquirer.registerPrompt('autocomplete', autocomplete);
@@ -239,12 +240,17 @@ export async function startChat() {
                 commandToRun = commandToRun.replace(/^\$\s*/, '').trim(); // Asegurar eliminación de $
                 
                 const autonomousMode = config.get('autonomousMode');
+                const isSafe = isSafeCommand(commandToRun);
 
-                if (autonomousMode) {
-                    console.log(chalk.yellow(`Executing suggested command: ${commandToRun}`));
+                if (autonomousMode || isSafe) {
+                    if (isSafe && !autonomousMode) {
+                        console.log(chalk.gray(`  ⚡ Auto-executing safe command: ${chalk.white(commandToRun)}`));
+                    } else {
+                        console.log(chalk.yellow(`Executing suggested command: ${commandToRun}`));
+                    }
+                    
                     try {
-                        const output = execSync(commandToRun, { encoding: 'utf-8', stdio: 'inherit' });
-                        if (output) console.log(output);
+                        execSync(commandToRun, { encoding: 'utf-8', stdio: 'inherit' });
                     } catch (e: any) {
                         console.error(chalk.red(`Command failed: ${e.message}`));
                     }

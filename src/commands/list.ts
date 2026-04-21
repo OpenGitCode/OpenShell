@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
-import { SKILLS_DIR, AUTO_DIR } from '../utils/FileSystem.js';
+import { SKILLS_DIR, LOCAL_SKILLS_DIR, AUTO_DIR } from '../utils/FileSystem.js';
 
 function createTable(headers: string[], rows: string[][]) {
     const colWidths = headers.map((h, i) => Math.max(h.length, ...rows.map(r => r[i]?.length || 0)) + 2);
@@ -31,23 +31,41 @@ listCommand.command('skills')
     .description('List all available skills')
     .action(() => {
         console.log(chalk.cyan.bold('\n  📦 OpenShell Skills\n'));
-        if (!fs.existsSync(SKILLS_DIR)) {
-            console.log(chalk.yellow('  Skills directory not found.'));
-            return;
-        }
+        const rows: string[][] = [];
 
-        const files = fs.readdirSync(SKILLS_DIR).filter(f => f.endsWith('.md'));
-        if (files.length === 0) {
+        const findSkills = (dir: string) => {
+            if (!fs.existsSync(dir)) return;
+            const items = fs.readdirSync(dir);
+            for (const item of items) {
+                const fullPath = path.join(dir, item);
+                const stat = fs.statSync(fullPath);
+                if (stat.isDirectory()) {
+                    const skillFile = path.join(fullPath, 'SKILL.md');
+                    if (fs.existsSync(skillFile)) {
+                        const content = fs.readFileSync(skillFile, 'utf-8');
+                        const nameMatch = content.match(/name:\s*(.*)/);
+                        const descMatch = content.match(/description:\s*(.*)/);
+                        const name = nameMatch?.[1] || item;
+                        const desc = descMatch?.[1] || 'No description';
+                        rows.push([name, desc, path.relative(process.cwd(), fullPath)]);
+                    } else {
+                        findSkills(fullPath);
+                    }
+                } else if (item.endsWith('.md')) {
+                    const content = fs.readFileSync(fullPath, 'utf-8');
+                    const title = content.split('\n')[0]?.replace('#', '').trim() || item;
+                    rows.push([title, 'Standard Skill', path.relative(process.cwd(), fullPath)]);
+                }
+            }
+        };
+
+        findSkills(SKILLS_DIR);
+        findSkills(LOCAL_SKILLS_DIR);
+
+        if (rows.length === 0) {
             console.log(chalk.yellow('  No skills found.'));
         } else {
-            const rows: string[][] = files.map(f => {
-                const content = fs.readFileSync(path.join(SKILLS_DIR, f), 'utf-8');
-                const title = content.split('\n')[0]?.replace('#', '').trim() || f;
-                const descMatch = content.match(/### Descripción\n([\s\S]*?)\n###/);
-                const description = (descMatch?.[1] ?? 'No description').trim().split('\n')[0] ?? 'No description';
-                return [title, description, f];
-            });
-            console.log(createTable(['Skill', 'Description', 'File'], rows));
+            console.log(createTable(['Skill', 'Description', 'Path'], rows));
         }
         console.log();
     });

@@ -4,7 +4,7 @@ import { OllamaProvider } from './providers/OllamaProvider.js';
 import { AnthropicProvider } from './providers/AnthropicProvider.js';
 import { OpenRouterProvider } from './providers/OpenRouterProvider.js';
 import config from './Config.js';
-import { readSkills, getModelContextDir } from '../utils/FileSystem.js';
+import { getSkillsSummary, getModelContextDir } from '../utils/FileSystem.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -48,7 +48,7 @@ export class Agent {
     }
 
     async ask(userInput: string, onToken?: (token: string) => void): Promise<string> {
-        const skills = readSkills();
+        const skillsSummary = getSkillsSummary();
         const autonomousMode = config.get('autonomousMode');
         
         // Procesar menciones de archivos @[archivo.ext]
@@ -70,11 +70,15 @@ export class Agent {
         const systemPrompt = `You are OpenShell, a terminal AI. 
 User: ${process.env.USER || 'User'} (Corona)
 Context: ${process.cwd()} (${process.platform})
-Skills: ${skills.join(', ')}
+
+Available Skills:
+${skillsSummary}
+
 ${fileContext ? 'Files: ' + fileContext : ''}
 Capabilities: search_web, read_file, write_file, execute_command.
 Rules: 
 - Use TOOL_CALL: {"tool": "...", ...} for tools.
+- If you need details about a skill, use read_file on its Location (e.g. read_file skills/github/SKILL.md).
 - If using \`\`\`bash blocks, ONLY put the raw command inside. No labels or prefixes.
 - Be concise.`;
 
